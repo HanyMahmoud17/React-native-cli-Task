@@ -1,33 +1,47 @@
-import { StatusBar, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-// import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './screens/HomeScreen'
-import AddDetailsScreens from './screens/AddDetailsScreens'
+import {StatusBar, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import HomeScreen from './screens/HomeScreen';
+import AddDetailsScreens from './screens/AddDetailsScreens';
+// redux persist
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistStore} from 'redux-persist';
+// Redux
+import {Provider} from 'react-redux';
+import {Store} from './store/redux/store';
 
-const Stack=createNativeStackNavigator();
-// const Stack = createStackNavigator();
+let persistor = persistStore(Store);
+
+const Stack = createNativeStackNavigator();
+
 const App = () => {
   return (
     <>
-    <StatusBar barStyle={'light-content'}/>
-   <NavigationContainer>
-    <Stack.Navigator>
-    {/* <Stack.Screen name='home' component={HomeScreen} options={{
+      <StatusBar barStyle={'light-content'} />
+      <Provider store={Store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {/* <Stack.Screen name='home' component={HomeScreen} options={{
         title:'Home'
       }}/> */}
-      <Stack.Screen name='propertyDetails' component={AddDetailsScreens} options={{
-        title:'Property Details',
-        headerTitleAlign: 'center',
-        }}/>
-      
-    </Stack.Navigator>
-   </NavigationContainer>
+              <Stack.Screen
+                name="propertyDetails"
+                component={AddDetailsScreens}
+                options={{
+                  title: 'Property Details',
+                  headerTitleAlign: 'center',
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PersistGate>
+      </Provider>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

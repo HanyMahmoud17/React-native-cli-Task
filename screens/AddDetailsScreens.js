@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {Colors} from '../constants/colors';
 import Input from '../components/Input';
 import AddMinus from '../components/Addminus';
@@ -13,8 +13,18 @@ import SwitchButton from '../components/SwitchButton';
 import ManySwitchButtons from '../components/ManySwitchButtons';
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import Button from '../components/ui/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUnitSize } from '../store/redux/homeSlice';
 
 const AddDetailsScreens = () => {
+  const unitSizeState = useSelector((state) => state.home.unitSize);
+  const [unitSize, setUnitSize] = useState(unitSizeState || '');
+  const dispatch=useDispatch()
+
+    function handleUnitSize(text) {
+    setUnitSize(text);
+    dispatch(addUnitSize(text)); 
+  }
   return (
     <ScrollView>
       <View style={styles.screen}>
@@ -29,10 +39,10 @@ const AddDetailsScreens = () => {
             label="Unit Size"
             textInputConfig={{
               keyboardType: 'decimal-pad',
-              onChangeText: () => {},
               placeholder: 'Enter Size',
               placeholderTextColor: Colors.borderColor,
-              // value: inputs.amount.value,
+              onChangeText: (text) => handleUnitSize(text),
+              value: unitSize,
             }}
             style={styles.inputStyle}
           />
