@@ -76,6 +76,7 @@ android {
 
     namespace "com.formtask"
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.formtask"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
