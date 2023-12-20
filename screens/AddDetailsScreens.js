@@ -1,4 +1,10 @@
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {Colors} from '../constants/colors';
 import Input from '../components/Input';
@@ -32,21 +38,21 @@ const AddDetailsScreens = () => {
           />
         </View>
         <View>
-          <View style={styles.addNumberOfItems}>
+          <View style={styles.items}>
             <AddMinus label="Bedrooms" />
             <AddMinus label="Bathrooms" />
           </View>
-          <View style={styles.addNumberOfItems}>
+          <View style={styles.items}>
             <AddMinus label="Bedrooms" />
             <AddMinus label="Bathrooms" />
           </View>
         </View>
         {/*  */}
-        <View style={styles.selectItems}>
+        <View style={styles.items}>
           <SwitchButton label="Furnish" leftText="Yes" rightText="No" />
           <SwitchButton label="Kitchen" leftText="Close" rightText="Open" />
         </View>
-        <View style={styles.selectItems}>
+        <View style={styles.items}>
           <SwitchButton label="Parking" leftText="Split" rightText="Central" />
         </View>
         {/*  */}
@@ -86,14 +92,18 @@ const AddDetailsScreens = () => {
         </View>
         {/*  */}
         <View style={styles.image}>
-         <Text style={styles.label}>Upload Image</Text>
-          <ImagePickerComponent/>
+          <Text style={styles.label}>Upload Image</Text>
+          <ImagePickerComponent />
         </View>
         {/*  */}
-        <View style={styles.btnsStyles}>
-        <Button btnStyle={styles.backBtnStyle} textStyle={styles.textBack}>Back</Button>
-        <Button btnStyle={styles.nextBtnStyle} textStyle={styles.textNextStyle}>Next</Button>
-        </View>
+      </View>
+      <View style={styles.btnsStyles}>
+        <Button btnStyle={styles.backBtnStyle} textStyle={styles.textBack}>
+          Back
+        </Button>
+        <Button btnStyle={styles.nextBtnStyle} textStyle={styles.textNextStyle}>
+          Next
+        </Button>
       </View>
     </ScrollView>
   );
@@ -118,13 +128,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     color: Colors.primary100,
   },
-  addNumberOfItems: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginVertical: 8,
-  },
-  selectItems: {
+  items: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -134,33 +138,40 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.primary200,
     marginBottom: 6,
-    marginTop:6,
+    marginTop: 6,
   },
-  image:{
-    marginVertical:8
+  image: {
+    marginVertical: 8,
   },
-  // 
-  btnsStyles:{
+  //
+  btnsStyles: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: 'white',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: {width: 0, height: -2},
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 4,
   },
-  nextBtnStyle:{
-    backgroundColor:'white'
+  nextBtnStyle: {
+    backgroundColor: 'white',
   },
-  textBack:{
-    color:Colors.greenColor,
+  textBack: {
+    color: Colors.greenColor,
     textAlign: 'center',
-    fontSize:18,
-    fontWeight:'bold'
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  nextBtnStyle:{
-    backgroundColor:Colors.greenColor,
+  nextBtnStyle: {
+    backgroundColor: Colors.greenColor,
   },
-  textNextStyle:{
+  textNextStyle: {
     textAlign: 'center',
-    fontSize:18,
-    fontWeight:'bold'
-  }
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });

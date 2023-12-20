@@ -15,9 +15,9 @@ const AddMinus = ({label}) => {
         </TouchableOpacity>
         <Text
           style={{
-            fontSize: 20,
-            // marginHorizontal: 15,
-            fontWeight: 'bold',
+            fontSize: 18,
+            // marginHorizontal:10,
+            fontWeight: '700',
             color: 'black',
           }}>
           5
@@ -44,6 +44,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderColor: Colors.primary200,
     borderWidth: 0.5,
+    overflow: 'hidden',
+
   },
   label: {
     fontSize: 12,
@@ -54,8 +56,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#eee',
-
-    width:'50%'
+    width:'35%',
+    height:'100%'
   },
   borderBtnText: {
     fontWeight: 'bold',
