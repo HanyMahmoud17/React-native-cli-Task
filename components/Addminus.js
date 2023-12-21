@@ -1,32 +1,24 @@
+import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Colors} from '../constants/colors';
 
-const AddMinus = ({label}) => {
+const AddMinus = ({label, amountValue, onAdd, onMinus}) => {
   return (
-    <View style={{flex:0.45}}>
+    <View style={{flex: 0.45}}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.screen}>
-        <TouchableOpacity
-          style={styles.borderBtn}
-          onPress={() => {
-            //   handleMinusQ(item._id);
-          }}>
+        <TouchableOpacity style={styles.borderBtn} onPress={onMinus}>
           <Text style={styles.borderBtnText}>-</Text>
         </TouchableOpacity>
         <Text
           style={{
             fontSize: 18,
-            // marginHorizontal:10,
             fontWeight: '700',
             color: 'black',
           }}>
-          5
+          {amountValue}
         </Text>
-        <TouchableOpacity
-          style={styles.borderBtn}
-          onPress={() => {
-            //   handleAddQ(item._id);
-          }}>
+        <TouchableOpacity style={styles.borderBtn} onPress={onAdd}>
           <Text style={styles.borderBtnText}>+</Text>
         </TouchableOpacity>
       </View>
@@ -45,7 +37,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary200,
     borderWidth: 0.5,
     overflow: 'hidden',
-
   },
   label: {
     fontSize: 12,
@@ -56,13 +47,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#eee',
-    width:'35%',
-    height:'100%'
+    width: '35%',
+    height: '100%',
   },
   borderBtnText: {
     fontWeight: 'bold',
     fontSize: 28,
     color: Colors.primary200,
-    // paddingHorizontal: 15,
   },
 });

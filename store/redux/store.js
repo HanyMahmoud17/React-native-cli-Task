@@ -1,18 +1,23 @@
 import { configureStore } from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { AsyncStorage } from "react-native";
+import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
-import homeSlice from "./homeSlice";
+import unitSizeSlice from "./unitSizeSlice";
+// import bedRoomSlice from "./bedRoomSlice";
+
 
 
 const reducers=combineReducers({
-    home:homeSlice
+    unitSize:unitSizeSlice,
+    // bedRoom: bedRoomSlice,
 })
 
 const persistConfig={
     key:'root',
-    storage:AsyncStorage,
-    whiteList:['home']
+    storage,
+    whiteList:['unitSize']
 }
 
 const persistedReducer=persistReducer(persistConfig,reducers);

@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {Colors} from '../constants/colors';
 import Input from '../components/Input';
 import AddMinus from '../components/Addminus';
@@ -13,17 +13,55 @@ import SwitchButton from '../components/SwitchButton';
 import ManySwitchButtons from '../components/ManySwitchButtons';
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import Button from '../components/ui/Button';
-import { useDispatch, useSelector } from 'react-redux';
-import { addUnitSize } from '../store/redux/homeSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {addUnitSize} from '../store/redux/unitSizeSlice';
+import {addBedR, minusBedR} from '../store/redux/bedRoomSlice';
 
 const AddDetailsScreens = () => {
-  const unitSizeState = useSelector((state) => state.home.unitSize);
-  const [unitSize, setUnitSize] = useState(unitSizeState || '');
-  const dispatch=useDispatch()
+  const state = useSelector(state => state.unitSize);
+  console.log(state);
+  const {
+    unitSize,
+    bedRooms,
+    bathRooms,
+    guestRoom,
+    lounges,
+    furnished,
+    kitchen,
+    parking,
+    electrialMeter,
+    waterMeters,
+    selectAcType,
+    image,
+  } = state;
+  const dispatch = useDispatch();
+  const [unitSizeState, setUnitSizeState] = useState(unitSize || '');
+  // console.log(unitSize);
+  //handle
+  const [bedrooms, setBedrooms] = useState(0);
+  const [bathrooms, setBathrooms] = useState(0);
 
-    function handleUnitSize(text) {
-    setUnitSize(text);
-    dispatch(addUnitSize(text)); 
+  const handleAddBedrooms = () => {
+    setBedrooms(bedrooms + 1);
+    dispatch(addBedR());
+  };
+
+  const handleMinusBedrooms = () => {
+    setBedrooms(bedrooms > 0 ? bedrooms - 1 : 0);
+    dispatch(minusBedR());
+  };
+
+  const handleAddBathrooms = () => {
+    setBathrooms(bathrooms + 1);
+  };
+
+  const handleMinusBathrooms = () => {
+    setBathrooms(bathrooms > 0 ? bathrooms - 1 : 0);
+  };
+
+  function handleUnitSize(text) {
+    setUnitSizeState(text);
+    dispatch(addUnitSize(text));
   }
   return (
     <ScrollView>
@@ -38,19 +76,29 @@ const AddDetailsScreens = () => {
           <Input
             label="Unit Size"
             textInputConfig={{
-              keyboardType: 'decimal-pad',
+              keyboardType: 'default',
               placeholder: 'Enter Size',
               placeholderTextColor: Colors.borderColor,
-              onChangeText: (text) => handleUnitSize(text),
-              value: unitSize,
+              onChangeText: text => handleUnitSize(text),
+              value: unitSizeState,
             }}
             style={styles.inputStyle}
           />
         </View>
         <View>
           <View style={styles.items}>
-            <AddMinus label="Bedrooms" />
-            <AddMinus label="Bathrooms" />
+            <AddMinus
+              label="Bedrooms"
+              amountValue={bedrooms}
+              onAdd={handleAddBedrooms}
+              onMinus={handleMinusBedrooms}
+            />
+            <AddMinus
+              label="Bathrooms"
+              amountValue={bathrooms}
+              onAdd={handleAddBathrooms}
+              onMinus={handleMinusBathrooms}
+            />
           </View>
           <View style={styles.items}>
             <AddMinus label="Bedrooms" />
