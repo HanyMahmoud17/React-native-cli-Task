@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Colors } from '../constants/colors';
-import { addImage } from '../store/redux/homeSlice';
+import { addImage, loadStateFromAsyncStorage } from '../store/redux/homeSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const ImagePickerComponent = () => {
@@ -20,17 +20,47 @@ const ImagePickerComponent = () => {
       })
       .catch((err) => console.log(err));
   };
+ //// //
+ const state = useSelector(state => state.unitSize);
+ const [localState, setLocalState] = useState({});
+ //
+ const [imagesSelected,setImageSelected]=useState([]);
+ 
+
+ // console.log(state);
+ useEffect(() => {
+   const loadInitialState = async () => {
+     const initialState = await loadStateFromAsyncStorage();
+     setLocalState(initialState);
+     if (initialState) {
+      //  setWaterMeter(initialState.waterMeters);
+      setImageSelected(initialState.image)
+       dispatch({type: 'HYDRATE', payload: initialState});
+     }
+   };
+
+   loadInitialState();
+ }, [dispatch]);
+ useEffect(() => {
+   setLocalState(state);
+ }, [state]);
+
 
   return (
     <View style={styles.screen}>
-      {images.length > 0 ? (
-          <View style={styles.imageContainer}>
-          {images.map((image, index) => (
-            image && image.uri ? (
-              <Image key={index} style={styles.image} source={{ uri: image.uri }} />
-            ) : null
-          ))}
-        </View>
+    {(images.length > 0 || imagesSelected.length > 0) ? (
+      <View style={styles.imageContainer}>
+        {images.map((image, index) => (
+          image && image.uri ? (
+            <Image key={index} style={styles.image} source={{ uri: image.uri }} />
+          ) : null
+        ))}
+        {imagesSelected.map((image, index) => (
+          image && image.uri ? (
+            <Image key={index} style={styles.image} source={{ uri: image.uri }} />
+          ) : null
+        ))}
+      </View>
       ) : (
         <>
           <Image style={styles.image} source={require('../assets/images/imagePick.png')} />

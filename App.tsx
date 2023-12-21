@@ -10,6 +10,7 @@ import {persistStore} from 'redux-persist';
 // Redux
 import {Provider} from 'react-redux';
 import store from './store/redux/store';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // let persistor = persistStore(Store);
 
@@ -25,13 +26,23 @@ const App = () => {
             <Stack.Navigator>
               {/* <Stack.Screen name='home' component={HomeScreen} options={{
         title:'Home'
-      }}/> */}
+      }}/>  */}
               <Stack.Screen
                 name="propertyDetails"
                 component={AddDetailsScreens}
                 options={{
                   title: 'Property Details',
                   headerTitleAlign: 'center',
+                  headerLeft: () => (
+                    <Ionicons
+                      name="arrow-back" 
+                      size={30}
+                      color="black"
+                      style={{ marginLeft: 10 }}
+                      onPress={() => {
+                      }}
+                    />
+                  ),
                 }}
               />
             </Stack.Navigator>

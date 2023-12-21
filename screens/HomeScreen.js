@@ -6,10 +6,18 @@ function addDetailsHandler(){
   navigation.navigate('propertyDetails')
 }
   return (
+    <View styles={styles.screen}>
+
     <Button title='Add Details' onPress={addDetailsHandler}/>
+    </View>
   )
 }
 
 export default HomeScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  screen:{
+marginHorizontal:30,
+marginVertical:30
+  }
+})

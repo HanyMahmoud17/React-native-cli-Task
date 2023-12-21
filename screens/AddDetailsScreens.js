@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {Colors} from '../constants/colors';
 import Input from '../components/Input';
 import AddMinus from '../components/Addminus';
@@ -32,7 +32,13 @@ import {
   addWaterMeter,
 } from '../store/redux/homeSlice';
 
-const AddDetailsScreens = () => {
+const AddDetailsScreens = ({navigation}) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <View style={styles.greenLine} />,
+    });
+  }, [navigation]);
+
   const state = useSelector(state => state.unitSize);
   const [localState, setLocalState] = useState({});
   //unitSize
@@ -141,7 +147,6 @@ const AddDetailsScreens = () => {
     setWaterMeter(text);
     dispatch(addWaterMeter(text));
   }
-  
 
   return (
     <ScrollView>
@@ -342,5 +347,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  greenLine: {
+    flexDirection: 'row',
+    width: 100,
+    marginBottom: -50,
+    height: 5,
+    backgroundColor: 'green',
   },
 });
