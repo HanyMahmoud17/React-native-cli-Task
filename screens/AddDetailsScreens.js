@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Colors} from '../constants/colors';
 import Input from '../components/Input';
 import AddMinus from '../components/Addminus';
@@ -14,12 +14,66 @@ import ManySwitchButtons from '../components/ManySwitchButtons';
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import Button from '../components/ui/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import {addUnitSize} from '../store/redux/unitSizeSlice';
-import {addBedR, minusBedR} from '../store/redux/bedRoomSlice';
+import {
+  addUnitSize,
+  addBedR,
+  minusBedR,
+  loadStateFromAsyncStorage,
+  addBathRoom,
+  minusBathRoom,
+  addGuestRoom,
+  minusGuestRoom,
+  addLounge,
+  minusLounges,
+  setFurnished,
+  setKitchen,
+  setParking,
+  addElectricalMeter,
+  addWaterMeter,
+} from '../store/redux/homeSlice';
 
 const AddDetailsScreens = () => {
   const state = useSelector(state => state.unitSize);
-  console.log(state);
+  const [localState, setLocalState] = useState({});
+  //unitSize
+  const [unitSizeState, setUnitSizeState] = useState();
+  //Add and Minus Buttons
+  const [bedrooms, setBedrooms] = useState(0);
+  const [bathrooms, setBathrooms] = useState(0);
+  const [guestrooms, setGuestRoom] = useState(0);
+  const [lounge, setLounges] = useState(0);
+
+  // switch buttons
+  const [furnish, setFurnish] = useState();
+  // electriacl and water
+  const [electricalMeter, setElectriaclMeter] = useState();
+  const [waterMeter, setWaterMeter] = useState();
+
+  // console.log(state);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const loadInitialState = async () => {
+      const initialState = await loadStateFromAsyncStorage();
+      setLocalState(initialState);
+      if (initialState) {
+        setUnitSizeState(initialState.unitSize);
+        setBedrooms(initialState.bedRooms);
+        setBathrooms(initialState.bathRooms);
+        setGuestRoom(initialState.guestRoom);
+        setLounges(initialState.lounges);
+        setFurnish(initialState.furnished);
+        setElectriaclMeter(initialState.electrialMeter);
+        setWaterMeter(initialState.waterMeters);
+        dispatch({type: 'HYDRATE', payload: initialState});
+      }
+    };
+
+    loadInitialState();
+  }, [dispatch]);
+  useEffect(() => {
+    setLocalState(state);
+  }, [state]);
+
   const {
     unitSize,
     bedRooms,
@@ -33,13 +87,7 @@ const AddDetailsScreens = () => {
     waterMeters,
     selectAcType,
     image,
-  } = state;
-  const dispatch = useDispatch();
-  const [unitSizeState, setUnitSizeState] = useState(unitSize || '');
-  // console.log(unitSize);
-  //handle
-  const [bedrooms, setBedrooms] = useState(0);
-  const [bathrooms, setBathrooms] = useState(0);
+  } = localState;
 
   const handleAddBedrooms = () => {
     setBedrooms(bedrooms + 1);
@@ -53,16 +101,48 @@ const AddDetailsScreens = () => {
 
   const handleAddBathrooms = () => {
     setBathrooms(bathrooms + 1);
+    dispatch(addBathRoom());
   };
 
   const handleMinusBathrooms = () => {
     setBathrooms(bathrooms > 0 ? bathrooms - 1 : 0);
+    dispatch(minusBathRoom());
+  };
+
+  const handleAddGuestRooms = () => {
+    setGuestRoom(guestRoom + 1);
+    dispatch(addGuestRoom());
+  };
+
+  const handleMinusGuestRooms = () => {
+    setGuestRoom(guestRoom > 0 ? guestRoom - 1 : 0);
+    dispatch(minusGuestRoom());
+  };
+
+  const handleAddLounges = () => {
+    setLounges(lounge + 1);
+    dispatch(addLounge());
+  };
+
+  const handleMinusLounges = () => {
+    setLounges(lounge > 0 ? lounge - 1 : 0);
+    dispatch(minusLounges());
   };
 
   function handleUnitSize(text) {
     setUnitSizeState(text);
     dispatch(addUnitSize(text));
   }
+  function handleElectriaclMeter(text) {
+    setElectriaclMeter(text);
+    dispatch(addElectricalMeter(text));
+  }
+  function handleWaterMeter(text) {
+    setWaterMeter(text);
+    dispatch(addWaterMeter(text));
+  }
+  
+
   return (
     <ScrollView>
       <View style={styles.screen}>
@@ -76,7 +156,7 @@ const AddDetailsScreens = () => {
           <Input
             label="Unit Size"
             textInputConfig={{
-              keyboardType: 'default',
+              keyboardType: 'decimal-pad',
               placeholder: 'Enter Size',
               placeholderTextColor: Colors.borderColor,
               onChangeText: text => handleUnitSize(text),
@@ -101,17 +181,48 @@ const AddDetailsScreens = () => {
             />
           </View>
           <View style={styles.items}>
-            <AddMinus label="Bedrooms" />
-            <AddMinus label="Bathrooms" />
+            <AddMinus
+              label="guestRoom"
+              amountValue={guestrooms}
+              onAdd={handleAddGuestRooms}
+              onMinus={handleMinusGuestRooms}
+            />
+            <AddMinus
+              label="Lounges"
+              amountValue={lounge}
+              onAdd={handleAddLounges}
+              onMinus={handleMinusLounges}
+            />
           </View>
         </View>
         {/*  */}
         <View style={styles.items}>
-          <SwitchButton label="Furnish" leftText="Yes" rightText="No" />
-          <SwitchButton label="Kitchen" leftText="Close" rightText="Open" />
+          <SwitchButton
+            label="Furnish"
+            leftText="Yes"
+            rightText="No"
+            onSelectionChange={selectedOption => {
+              dispatch(setFurnished(selectedOption));
+            }}
+          />
+          <SwitchButton
+            label="Kitchen"
+            leftText="Close"
+            rightText="Open"
+            onSelectionChange={selectedOption => {
+              dispatch(setKitchen(selectedOption));
+            }}
+          />
         </View>
         <View style={styles.items}>
-          <SwitchButton label="Parking" leftText="Split" rightText="Central" />
+          <SwitchButton
+            label="Parking"
+            leftText="Split"
+            rightText="Central"
+            onSelectionChange={selectedOption => {
+              dispatch(setParking(selectedOption));
+            }}
+          />
         </View>
         {/*  */}
         <View>
@@ -119,10 +230,10 @@ const AddDetailsScreens = () => {
             label="Electrical Meter No."
             textInputConfig={{
               keyboardType: 'decimal-pad',
-              onChangeText: () => {},
               placeholder: 'Enter meter no.',
               placeholderTextColor: Colors.borderColor,
-              // value: inputs.amount.value,
+              onChangeText: text => handleElectriaclMeter(text),
+              value: electrialMeter,
             }}
             style={styles.inputStyle}
           />
@@ -130,10 +241,10 @@ const AddDetailsScreens = () => {
             label="Water Meter No."
             textInputConfig={{
               keyboardType: 'decimal-pad',
-              onChangeText: () => {},
               placeholder: 'Enter meter no.',
               placeholderTextColor: Colors.borderColor,
-              // value: inputs.amount.value,
+              onChangeText: text => handleWaterMeter(text),
+              value: waterMeter,
             }}
             style={styles.inputStyle}
           />

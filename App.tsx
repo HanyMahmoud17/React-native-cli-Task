@@ -9,9 +9,9 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 // Redux
 import {Provider} from 'react-redux';
-import {Store} from './store/redux/store';
+import store from './store/redux/store';
 
-let persistor = persistStore(Store);
+// let persistor = persistStore(Store);
 
 const Stack = createNativeStackNavigator();
 
@@ -19,8 +19,8 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle={'light-content'} />
-      <Provider store={Store}>
-        <PersistGate loading={null} persistor={persistor}>
+      <Provider store={store}>
+        {/* <PersistGate loading={null} persistor={persistor}> */}
           <NavigationContainer>
             <Stack.Navigator>
               {/* <Stack.Screen name='home' component={HomeScreen} options={{
@@ -36,7 +36,7 @@ const App = () => {
               />
             </Stack.Navigator>
           </NavigationContainer>
-        </PersistGate>
+        {/* </PersistGate> */}
       </Provider>
     </>
   );

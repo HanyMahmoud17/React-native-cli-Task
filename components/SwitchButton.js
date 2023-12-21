@@ -2,8 +2,12 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import { Colors } from '../constants/colors';
 
-const SwitchButton = ({label,leftText,rightText}) => {
+const SwitchButton = ({label,leftText,rightText,onSelectionChange}) => {
   const [selectedTap, setSelectedTap] = useState(0);
+  const handleSelectionChange = (selectedOption) => {
+    setSelectedTap(selectedOption);
+    onSelectionChange(selectedOption === 0 ? leftText : rightText);
+  };
   return (
     <View style={{flex:0.45}}>
         <Text style={styles.label}>{label}</Text>
@@ -27,7 +31,7 @@ const SwitchButton = ({label,leftText,rightText}) => {
               justifyContent:'center',
               overflow: 'hidden',
             }}
-            onPress={() => setSelectedTap(0)}>
+            onPress={() => handleSelectionChange(0)}>
             <Text
               style={{
                 color: selectedTap === 0 ? '#fff' : '#000',
@@ -48,7 +52,7 @@ const SwitchButton = ({label,leftText,rightText}) => {
               justifyContent:'center',
               overflow: 'hidden',
             }}
-            onPress={() => setSelectedTap(1)}>
+            onPress={() => handleSelectionChange(1)}>
             <Text
               style={{
                 color: selectedTap === 1 ? '#fff' : '#000',
